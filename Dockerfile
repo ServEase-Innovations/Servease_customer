@@ -25,4 +25,4 @@ COPY --from=build /app/target/customertab-0.0.1-SNAPSHOT.jar /app/customertab-0.
 EXPOSE 8080
 
 # Command to run the Spring Boot application
-CMD ["java", "-jar", "/app/customertab-0
+CMD ["java", "-jar", "/app/customertab-0]
