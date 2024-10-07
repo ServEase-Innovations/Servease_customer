@@ -10,7 +10,9 @@ import com.cus.customertab.constants.CustomerConstants;
 import com.cus.customertab.dto.CustomerConcernDTO;
 import com.cus.customertab.dto.CustomerDTO;
 import com.cus.customertab.dto.CustomerRequestDTO;
+import com.cus.customertab.dto.CustomerFeedbackDTO;
 import com.cus.customertab.service.CustomerConcernService;
+import com.cus.customertab.service.CustomerFeedbackService;
 import com.cus.customertab.service.CustomerRequestService;
 import com.cus.customertab.service.CustomerService;
 
@@ -32,6 +34,9 @@ public class CustomerController {
     @Autowired
     private CustomerConcernService customerConcernService;
 
+    @Autowired
+    private CustomerFeedbackService customerFeedbackService;
+
     //--------------------------API's FOR CUSTOMER ENTITY----------------------------------------
     // API to get all customers
     @GetMapping("/get-all-customers")
@@ -47,7 +52,7 @@ public class CustomerController {
     public ResponseEntity<CustomerDTO> getCustomerById(
             @ApiParam(value = "ID of the customer to retrieve", required = true) @PathVariable Long id) {
         CustomerDTO customerDTO = customerService.getCustomerById(id);
-        return ResponseEntity.ok(customerDTO); // Handle null in global exception handler
+        return ResponseEntity.ok(customerDTO); 
     }
 
     // API to add a customer
@@ -56,7 +61,7 @@ public class CustomerController {
     public ResponseEntity<String> addCustomer(
             @ApiParam(value = "Customer data to add", required = true) @RequestBody CustomerDTO customerDTO) {
         customerService.saveCustomer(customerDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(CustomerConstants.CUSTOMER_ADDED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(CustomerConstants.ADDED);
     }
 
     // API to update a customer
@@ -67,7 +72,7 @@ public class CustomerController {
             @ApiParam(value = "Updated customer object", required = true) @RequestBody CustomerDTO customerDTO) {
         customerDTO.setCustomerId(id);
         customerService.updateCustomer(customerDTO);
-        return ResponseEntity.ok(CustomerConstants.CUSTOMER_UPDATED);
+        return ResponseEntity.ok(CustomerConstants.UPDATED);
     }
 
     // API to delete a customer
@@ -76,7 +81,7 @@ public class CustomerController {
     public ResponseEntity<String> deleteCustomer(
             @ApiParam(value = "ID of the customer to delete", required = true) @PathVariable Long id) {
         customerService.deleteCustomer(id);
-        return ResponseEntity.ok(CustomerConstants.CUSTOMER_DELETED);
+        return ResponseEntity.ok(CustomerConstants.DELETED);
     }
 
     //----------------------API's FOR CUSTOMER REQUEST ENTITY---------------------------------
@@ -93,7 +98,7 @@ public class CustomerController {
     @ApiOperation(value = "Get customer request by ID", response = CustomerRequestDTO.class)
     public ResponseEntity<CustomerRequestDTO> getCustomerRequestById(@PathVariable Long requestId) {
         CustomerRequestDTO requestDTO = customerRequestService.getByRequestId(requestId);
-        return ResponseEntity.ok(requestDTO); // Handle null in global exception handler
+        return ResponseEntity.ok(requestDTO);
     }
 
     // API to get all open requests
@@ -117,7 +122,7 @@ public class CustomerController {
     @ApiOperation(value = "Add a new customer request")
     public ResponseEntity<String> insertCustomerRequest(@RequestBody CustomerRequestDTO customerRequestDTO) {
         customerRequestService.insert(customerRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(CustomerConstants.CUSTOMER_REQUEST_ADDED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(CustomerConstants.ADDED);
     }
 
     // API to update customer request
@@ -127,7 +132,7 @@ public class CustomerController {
             @RequestBody CustomerRequestDTO customerRequestDTO) {
         customerRequestDTO.setRequestId(requestId);
         customerRequestService.update(customerRequestDTO);
-        return ResponseEntity.ok(CustomerConstants.CUSTOMER_REQUEST_UPDATED);
+        return ResponseEntity.ok(CustomerConstants.UPDATED);
     }
 
     //--------------------------API's FOR CUSTOMER CONCERN ENTITY-------------------------------
@@ -144,7 +149,7 @@ public class CustomerController {
     @ApiOperation(value = "Retrieve a customer concern by ID", response = CustomerConcernDTO.class)
     public ResponseEntity<CustomerConcernDTO> getConcernById(@PathVariable Long id) {
         CustomerConcernDTO concernDTO = customerConcernService.getConcernById(id);
-        return ResponseEntity.ok(concernDTO); // Handle null in global exception handler
+        return ResponseEntity.ok(concernDTO); 
     } 
 
     // API to add a new customer concern
@@ -152,7 +157,7 @@ public class CustomerController {
     @ApiOperation(value = "Add a new customer concern", response = String.class)
     public ResponseEntity<String> addNewConcern(@RequestBody CustomerConcernDTO customerConcernDTO) {
         customerConcernService.addNewConcern(customerConcernDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(CustomerConstants.CUSTOMER_CONCERN_ADDED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(CustomerConstants.ADDED);
     }
 
     // API to update an existing customer concern
@@ -162,7 +167,7 @@ public class CustomerController {
             @RequestBody CustomerConcernDTO customerConcernDTO) {
         customerConcernDTO.setId(id);
         customerConcernService.modifyConcern(customerConcernDTO);
-        return ResponseEntity.ok(CustomerConstants.CUSTOMER_CONCERN_UPDATED);
+        return ResponseEntity.ok(CustomerConstants.UPDATED);
     }
 
     // API to delete a customer concern by ID
@@ -170,6 +175,40 @@ public class CustomerController {
     @ApiOperation(value = "Delete a customer concern by ID", response = String.class)
     public ResponseEntity<String> deleteConcern(@PathVariable Long id) {
         customerConcernService.deleteConcern(id);
-        return ResponseEntity.ok(CustomerConstants.CUSTOMER_CONCERN_DELETED);
+        return ResponseEntity.ok(CustomerConstants.DELETED);
     }
+
+    // --------------------------API's FOR CUSTOMER FEEDBACK ENTITY--------------------------------
+    // API to get all customer feedback
+    @GetMapping("/get-all-feedback")
+    @ApiOperation(value = "Retrieve all customer feedback", response = List.class)
+    public ResponseEntity<List<CustomerFeedbackDTO>> getAllFeedback() {
+        List<CustomerFeedbackDTO> feedbackList = customerFeedbackService.getAllFeedback();
+        return ResponseEntity.ok(feedbackList);
+    }
+
+    // API to get feedback by ID
+    @GetMapping("/get-feedback-by-id/{id}")
+    @ApiOperation(value = "Retrieve customer feedback by ID", response = CustomerFeedbackDTO.class)
+    public ResponseEntity<CustomerFeedbackDTO> getFeedbackById(@PathVariable Long id) {
+        CustomerFeedbackDTO feedbackDTO = customerFeedbackService.getFeedbackById(id);
+        return ResponseEntity.ok(feedbackDTO);
+    }
+
+    // API to add new customer feedback
+    @PostMapping("/add-feedback")
+    @ApiOperation(value = "Add a new customer feedback", response = String.class)
+    public ResponseEntity<String> addFeedback(@RequestBody CustomerFeedbackDTO customerFeedbackDTO) {
+        customerFeedbackService.addFeedback(customerFeedbackDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(CustomerConstants.ADDED);
+    }
+
+    // API to delete customer feedback by ID
+    @DeleteMapping("/delete-feedback/{id}")
+    @ApiOperation(value = "Delete customer feedback by ID", response = String.class)
+    public ResponseEntity<String> deleteFeedback(@PathVariable Long id) {
+        customerFeedbackService.deleteFeedback(id);
+        return ResponseEntity.ok(CustomerConstants.DELETED);
+    }
+
 }

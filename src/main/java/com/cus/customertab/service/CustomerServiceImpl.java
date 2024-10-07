@@ -28,7 +28,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     public List<CustomerDTO> getAllCustomers() {
         Session session = sessionFactory.getCurrentSession();
-        List<Customer> customers = session.createQuery("from Customer", Customer.class).list();
+        List<Customer> customers = session.createQuery(CustomerConstants.GET_ALL_CUSTOMER, Customer.class).list();
         
         // Mapping the list of Customer entities to a list of CustomerDTOs
         return customers.stream()
@@ -57,7 +57,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setActive(true); 
         
         session.persist(customer);
-        return CustomerConstants.CUSTOMER_ADDED;
+        return CustomerConstants.ADDED;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerMapper.dtoToCustomer(customerDTO);
         session.merge(customer);
         
-        return CustomerConstants.CUSTOMER_UPDATED;
+        return CustomerConstants.UPDATED;
     }
 
     @Override
@@ -80,9 +80,9 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer != null) {
             customer.setActive(false);  // Soft delete by deactivating the customer
             session.merge(customer);
-            return CustomerConstants.CUSTOMER_DELETED;
+            return CustomerConstants.DELETED;
         } else {
-            return CustomerConstants.CUSTOMER_NOT_FOUND;
+            return CustomerConstants.NOT_FOUND;
         }
     }
 }

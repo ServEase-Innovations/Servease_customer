@@ -73,7 +73,7 @@ public class CustomerRequestServiceImpl implements CustomerRequestService {
         Session session = sessionFactory.getCurrentSession();
         CustomerRequest request = customerRequestMapper.dtoToCustomerRequest(customerRequestDTO);
         session.persist(request);
-        return CustomerConstants.CUSTOMER_REQUEST_ADDED;
+        return CustomerConstants.ADDED;
     }
 
     // To update a customer request
@@ -85,6 +85,6 @@ public class CustomerRequestServiceImpl implements CustomerRequestService {
         CustomerRequest updatedRequest = customerRequestMapper.dtoToCustomerRequest(customerRequestDTO);
         updatedRequest.setRequestId(existingRequest.getRequestId());
         session.merge(updatedRequest);
-        return CustomerConstants.CUSTOMER_REQUEST_UPDATED;
+        return CustomerConstants.UPDATED;
     }
 }

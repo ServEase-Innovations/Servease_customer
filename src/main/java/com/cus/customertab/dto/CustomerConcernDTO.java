@@ -18,6 +18,5 @@ public class CustomerConcernDTO {
     private String isResolved = "NO"; 
     private Timestamp resolvedOn; 
     private Long resolvedBy; 
-    private String resolutionRequired = "NO"; 
-    private Integer rating; 
+    private String resolutionRequired = "NO";  
 }

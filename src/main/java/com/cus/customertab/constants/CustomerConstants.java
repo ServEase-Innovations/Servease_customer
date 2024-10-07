@@ -10,20 +10,16 @@ public class CustomerConstants {
     public static final String DELETE_DESC = "Delete a customer by ID";
 
     //Query Contants
+    public static final String GET_ALL_CUSTOMER = "FROM Customer";
+    public static final String GET_ALL_CUSTOMER_CONCERNS = "FROM CustomerConcern";
+    public static final String GET_ALL_CUSTOMER_FEEDBACK = "FROM CustomerFeedback";
     public static final String GET_ALL_CUSTOMER_REQUESTS = "FROM CustomerRequest";
     public static final String GET_OPEN_CUSTOMER_REQUESTS = "FROM CustomerRequest WHERE isResolved = 'NO'";
     public static final String GET_POTENTIAL_CUSTOMERS = "FROM CustomerRequest WHERE isPotential = 'YES'";
 
     // Response Messages
-    public static final String CUSTOMER_ADDED = "Customer added successfully!";
-    public static final String CUSTOMER_UPDATED = "Customer updated successfully!";
-    public static final String CUSTOMER_DELETED = "Customer deleted successfully!";
-    public static final String CUSTOMER_NOT_FOUND = "Customer not found";
-
-    public static final String CUSTOMER_REQUEST_ADDED = "Customer request added successfully!";
-    public static final String CUSTOMER_REQUEST_UPDATED = "Customer request updated successfully!";
-
-    public static final String CUSTOMER_CONCERN_ADDED = "Customer concern added successfully!";
-    public static final String CUSTOMER_CONCERN_UPDATED = "Customer concern updated successfully!";
-    public static final String CUSTOMER_CONCERN_DELETED = "Customer concern deleted successfully!";
+    public static final String ADDED = "ADDED SUCCESSFULLY !";
+    public static final String UPDATED = "UPDATED SUCCESSFULLY !";
+    public static final String DELETED = "DELETED SUCCESSFULLY !";
+    public static final String NOT_FOUND = "NOT FOUND";
 }

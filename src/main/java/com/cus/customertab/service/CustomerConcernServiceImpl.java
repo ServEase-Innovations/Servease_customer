@@ -26,7 +26,8 @@ public class CustomerConcernServiceImpl implements CustomerConcernService {
     @Transactional(readOnly = true)
     public List<CustomerConcernDTO> getAllConcerns() {
         Session session = sessionFactory.getCurrentSession();
-        List<CustomerConcern> concerns = session.createQuery("FROM CustomerConcern", CustomerConcern.class)
+        List<CustomerConcern> concerns = session.createQuery(
+                CustomerConstants.GET_ALL_CUSTOMER_CONCERNS, CustomerConcern.class)
                 .getResultList();
         return concerns.stream()
                 .map(customerConcernMapper::customerConcernToDTO)
@@ -49,7 +50,7 @@ public class CustomerConcernServiceImpl implements CustomerConcernService {
         Session session = sessionFactory.getCurrentSession();
         CustomerConcern concern = customerConcernMapper.dtoToCustomerConcern(customerConcernDTO);
         session.persist(concern);
-        return CustomerConstants.CUSTOMER_CONCERN_ADDED;
+        return CustomerConstants.ADDED;
     }
 
     // To modify a customer concern
@@ -61,7 +62,7 @@ public class CustomerConcernServiceImpl implements CustomerConcernService {
         CustomerConcern updatedConcern = customerConcernMapper.dtoToCustomerConcern(customerConcernDTO);
         updatedConcern.setId(existingConcern.getId());
         session.merge(updatedConcern);
-        return CustomerConstants.CUSTOMER_CONCERN_UPDATED;
+        return CustomerConstants.UPDATED;
     }
 
     // To delete a customer concern
@@ -71,6 +72,6 @@ public class CustomerConcernServiceImpl implements CustomerConcernService {
         Session session = sessionFactory.getCurrentSession();
         CustomerConcern existingConcern = session.get(CustomerConcern.class, id);
         session.remove(existingConcern);
-        return CustomerConstants.CUSTOMER_CONCERN_DELETED;
+        return CustomerConstants.DELETED;
     }
 }
