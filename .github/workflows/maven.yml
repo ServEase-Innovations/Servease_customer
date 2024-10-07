@@ -1,0 +1,63 @@
+name: Deploy Spring Boot to AWS Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - main   # Trigger deploy only on changes to the 'main' branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu image for the runner
+
+    steps:
+    # Checkout the repository code
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # Set up JDK (Ensure you're using JDK 17 or whichever version your app requires)
+    - name: Set up JDK 17
+      uses: actions/setup-java@v2
+      with:
+        java-version: '17'
+        distribution: 'adoptopenjdk'  # You can use openjdk or adoptopenjdk
+
+    # Set up Maven (to run tests and build the app)
+    - name: Set up Maven
+      uses: actions/setup-java@v2
+      with:
+        java-version: '17'
+        maven-version: '3.8.1'
+
+    # Run Maven to build the app (this also runs tests)
+    - name: Build with Maven
+      run: mvn clean package -DskipTests
+
+    # Deploy to AWS Elastic Beanstalk
+    - name: Deploy to AWS Elastic Beanstalk
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+      run: |
+        # Install the AWS CLI if it's not already available
+        curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        sudo ./aws/install
+
+        # Authenticate with AWS
+        aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+        aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+        aws configure set region $AWS_REGION
+
+        # Zip the app (Elastic Beanstalk expects a .jar file)
+        zip -r target/springboot-app.zip target/*.jar
+
+        # Deploy to Elastic Beanstalk (assumes you have an environment set up already)
+        aws elasticbeanstalk create-application-version \
+          --application-name MySpringBootApp \
+          --version-label $GITHUB_SHA \
+          --source-bundle S3Bucket="your-bucket-name",S3Key="springboot-app.zip"
+
+        aws elasticbeanstalk update-environment \
+          --environment-name your-environment-name \
+          --version-label $GITHUB_SHA
