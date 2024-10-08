@@ -84,7 +84,6 @@ public class Customer {
     @Column(nullable = false)
     private boolean isActive;
 
-	//to automatically set data and isActive field
 	@PrePersist
 	public void prePersist(){
 		this.enrolledDate = new Timestamp(System.currentTimeMillis());
