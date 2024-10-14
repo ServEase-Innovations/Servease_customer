@@ -11,8 +11,10 @@ import com.cus.customertab.dto.CustomerConcernDTO;
 import com.cus.customertab.dto.CustomerDTO;
 import com.cus.customertab.dto.CustomerRequestDTO;
 import com.cus.customertab.dto.CustomerFeedbackDTO;
+import com.cus.customertab.dto.CustomerRequestCommentDTO;
 import com.cus.customertab.service.CustomerConcernService;
 import com.cus.customertab.service.CustomerFeedbackService;
+import com.cus.customertab.service.CustomerRequestCommentService;
 import com.cus.customertab.service.CustomerRequestService;
 import com.cus.customertab.service.CustomerService;
 
@@ -36,6 +38,9 @@ public class CustomerController {
 
     @Autowired
     private CustomerFeedbackService customerFeedbackService;
+
+    @Autowired
+    private CustomerRequestCommentService customerRequestCommentService;
 
     //--------------------------API's FOR CUSTOMER ENTITY----------------------------------------
     // API to get all customers
@@ -208,6 +213,48 @@ public class CustomerController {
     @ApiOperation(value = "Delete customer feedback by ID", response = String.class)
     public ResponseEntity<String> deleteFeedback(@PathVariable Long id) {
         customerFeedbackService.deleteFeedback(id);
+        return ResponseEntity.ok(CustomerConstants.DELETED);
+    }
+
+    //-----------------API's FOR CUSTOMER REQUEST COMMENT ENTITY---------------------------------
+    // API to get all customer request comments
+    @GetMapping("/get-all-comments")
+    @ApiOperation(value = "Retrieve all customer request comments", response = List.class)
+    public ResponseEntity<List<CustomerRequestCommentDTO>> getAllComments() {
+        List<CustomerRequestCommentDTO> commentsList = customerRequestCommentService.getAllComments();
+        return ResponseEntity.ok(commentsList);
+    }
+
+    // API to get comment by ID
+    @GetMapping("/get-comment-by-id/{id}")
+    @ApiOperation(value = "Retrieve customer request comment by ID", response = CustomerRequestCommentDTO.class)
+    public ResponseEntity<CustomerRequestCommentDTO> getCommentById(@PathVariable Long id) {
+        CustomerRequestCommentDTO commentDTO = customerRequestCommentService.getCommentById(id);
+        return ResponseEntity.ok(commentDTO);
+    }
+
+    // API to add a new customer request comment
+    @PostMapping("/add-comment")
+    @ApiOperation(value = "Add a new customer request comment", response = String.class)
+    public ResponseEntity<String> addComment(@RequestBody CustomerRequestCommentDTO customerRequestCommentDTO) {
+        customerRequestCommentService.addComment(customerRequestCommentDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(CustomerConstants.ADDED);
+    }
+
+    // API to update a comment by ID
+    @PutMapping("/update-comment/{id}")
+    @ApiOperation(value = "Update a comment by ID", response = String.class)
+    public ResponseEntity<String> updateComment(@PathVariable Long id,
+            @RequestBody CustomerRequestCommentDTO customerRequestCommentDTO) {
+        String response = customerRequestCommentService.updateComment(id, customerRequestCommentDTO);
+        return ResponseEntity.ok(response);
+    }
+
+    // API to delete customer request comment by ID
+    @DeleteMapping("/delete-comment/{id}")
+    @ApiOperation(value = "Delete customer request comment by ID", response = String.class)
+    public ResponseEntity<String> deleteComment(@PathVariable Long id) {
+        customerRequestCommentService.deleteComment(id);
         return ResponseEntity.ok(CustomerConstants.DELETED);
     }
 

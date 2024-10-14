@@ -2,12 +2,12 @@ package com.cus.customertab.entity;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-
 import com.cus.customertab.enums.Gender;
 import com.cus.customertab.enums.Habit;
 import com.cus.customertab.enums.LanguageKnown;
 import com.cus.customertab.enums.ServiceType;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,13 +15,13 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 
 @Data
@@ -35,9 +35,7 @@ public class CustomerRequest {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long requestId;
 
-    @ManyToOne
-    @JoinColumn(name = "customerId", referencedColumnName = "customerId", nullable = false)
-    private Customer customer;
+    private Long customerId;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -77,12 +75,6 @@ public class CustomerRequest {
     private String isResolved = "NO";
 
     @Column
-    private Long commentBy;
-
-    @Column(length = 255)
-    private String comments;
-
-    @Column
     private Long supervisorId;
 
     @Column(nullable = false)
@@ -91,8 +83,8 @@ public class CustomerRequest {
     @Column
     private Long modifiedBy;
 
-    @Column
-    private Timestamp commentsOn;
+    @OneToMany(mappedBy = "customerRequest", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CustomerRequestComment> comments;
 
     @PrePersist
     protected void onCreate(){

@@ -10,9 +10,9 @@ import com.cus.customertab.entity.CustomerRequest;
 public interface CustomerRequestMapper {
     CustomerRequestMapper INSTANCE = Mappers.getMapper(CustomerRequestMapper.class);
 
-    @Mapping(source = "customer.customerId", target = "customerId")
+    @Mapping(target = "comments", ignore = true) // Ignore the comments property
     CustomerRequestDTO customerRequestToDTO(CustomerRequest customerRequest);
 
-    @Mapping(source = "customerId", target = "customer.customerId")
+    @Mapping(target = "comments", ignore = true) // Ignore the comments property for this mapping as well
     CustomerRequest dtoToCustomerRequest(CustomerRequestDTO customerRequestDTO);
 }
