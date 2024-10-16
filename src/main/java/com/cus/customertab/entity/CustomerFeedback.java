@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class CustomerFeedback {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long customerId;

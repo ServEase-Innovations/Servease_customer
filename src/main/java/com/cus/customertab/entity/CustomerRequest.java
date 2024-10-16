@@ -6,12 +6,12 @@ import com.cus.customertab.enums.Gender;
 import com.cus.customertab.enums.Habit;
 import com.cus.customertab.enums.LanguageKnown;
 import com.cus.customertab.enums.ServiceType;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,7 +22,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
-
+import java.util.ArrayList;
 
 @Data
 @NoArgsConstructor
@@ -30,13 +30,13 @@ import java.util.List;
 @Entity
 @Table(name = "CustomerRequest")
 public class CustomerRequest {
-    
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Ensures unique ID generation for CustomerRequest
     private Long requestId;
 
     private Long customerId;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ServiceType serviceType;
@@ -51,7 +51,7 @@ public class CustomerRequest {
     private String ageRange;
 
     @Enumerated(EnumType.STRING)
-    private Habit cookingHabit; 
+    private Habit cookingHabit;
 
     @Enumerated(EnumType.STRING)
     private Habit dietryHabit;
@@ -83,16 +83,16 @@ public class CustomerRequest {
     @Column
     private Long modifiedBy;
 
-    @OneToMany(mappedBy = "customerRequest", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CustomerRequestComment> comments;
+    @OneToMany(mappedBy = "customerRequest", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<CustomerRequestComment> comments = new ArrayList<>();
 
     @PrePersist
-    protected void onCreate(){
+    protected void onCreate() {
         createdDate = Timestamp.valueOf(LocalDateTime.now());
         assignedDate = Timestamp.valueOf(LocalDateTime.now());
     }
-    
-    protected void onUpdate(){
+
+    protected void onUpdate() {
         modifiedDate = Timestamp.valueOf(LocalDateTime.now());
     }
 }
