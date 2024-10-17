@@ -23,11 +23,11 @@ import lombok.NoArgsConstructor;
 public class CustomerRequestComment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Changed to IDENTITY to ensure unique ID generation
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "requestId", nullable = false) // Reference to CustomerRequest without @MapsId
+    @JoinColumn(name = "requestId", nullable = false) 
     private CustomerRequest customerRequest;
 
     @Column(length = 255, nullable = false)
