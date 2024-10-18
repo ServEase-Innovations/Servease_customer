@@ -6,12 +6,13 @@ import com.cus.customertab.enums.Gender;
 import com.cus.customertab.enums.Habit;
 import com.cus.customertab.enums.LanguageKnown;
 import com.cus.customertab.enums.ServiceType;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -83,7 +84,8 @@ public class CustomerRequest {
     @Column
     private Long modifiedBy;
 
-    @OneToMany(mappedBy = "customerRequest", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customerRequest", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<CustomerRequestComment> comments = new ArrayList<>();
 
     @PrePersist

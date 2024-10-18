@@ -2,6 +2,9 @@ package com.cus.customertab.entity;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,7 +30,8 @@ public class CustomerRequestComment {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "requestId", nullable = false) 
+    @JoinColumn(name = "requestId", nullable = false)
+    @JsonBackReference
     private CustomerRequest customerRequest;
 
     @Column(length = 255, nullable = false)

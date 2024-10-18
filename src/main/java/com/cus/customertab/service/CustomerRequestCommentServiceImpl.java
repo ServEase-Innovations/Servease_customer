@@ -58,10 +58,10 @@ public class CustomerRequestCommentServiceImpl implements CustomerRequestComment
             throw new IllegalArgumentException(
                     "CustomerRequest with ID " + commentDTO.getRequestId() + " does not exist.");
         }
-        CustomerRequestComment comment = customerRequestCommentMapper.dtoToCustomerRequestComment(commentDTO);
-        comment.setCustomerRequest(customerRequest); 
-        customerRequest.getComments().add(comment); 
-        session.persist(comment); 
+        CustomerRequestComment comment = customerRequestCommentMapper.dtoToCustomerRequestComment(commentDTO); 
+        customerRequest.getComments().add(comment);
+        comment.setCustomerRequest(customerRequest);
+        session.persist(comment);
         return CustomerConstants.ADDED;
     }
 
